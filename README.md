@@ -1,2 +1,15 @@
 # PCB-DESIGNS
-A collection of PCB designs created using KiCad, including power supply, embedded, and electronics learning projects.
+
+This repository contains multiple PCB design projects created using KiCad.
+The projects are intended for learning, experimentation, and academic use.
+
+## Tools Used
+- KiCad 9.0
+
+## Projects
+- AC–DC Converter
+- (More projects coming soon)
+
+## Notes
+- These designs are for educational purposes.
+- Follow electrical safety guidelines when working with AC mains.
