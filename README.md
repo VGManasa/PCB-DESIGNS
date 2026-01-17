@@ -8,6 +8,8 @@ The projects are intended for learning, experimentation, and academic use.
 
 ## Projects
 - AC–DC Converter
+- ULN2803A Relay Card
+- Raspberry Pi Pico IOT Board (In progress)
 - (More projects coming soon)
 
 ## Notes
