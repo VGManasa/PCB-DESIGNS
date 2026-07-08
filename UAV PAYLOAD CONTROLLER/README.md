@@ -319,7 +319,7 @@ Firmware development is supported through the SWD interface.
 The four-layer stackup provides:
 
 - Improved signal integrity
-- Low impedance ground return
+- Low-impedance ground return
 - Better power distribution
 - Reduced EMI
 - Simplified routing
@@ -386,12 +386,6 @@ Future hardware revisions may include:
 | PCB Fabrication | Planned |
 | Hardware Testing | Planned |
 | Firmware Development | In Progress |
-
----
-
-# License
-
-This project is licensed under the MIT License.
 
 ---
 
