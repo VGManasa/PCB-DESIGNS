@@ -21,8 +21,7 @@ The UAV Payload Controller integrates multiple functional subsystems into a comp
   - LoRa (RA-02) Wireless Module
   - GPS Receiver
   - USB Type-C Interface
-  - UART Interface
-  - CAN Interface
+  - SPI & I2C Communication
 
 - **Sensor Interfaces**
   - 6-Axis IMU
