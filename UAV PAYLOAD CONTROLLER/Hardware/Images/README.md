@@ -212,7 +212,6 @@ The schematic presents the overall architecture by illustrating the interconnect
 - Tank Sensor Interface
 - Pump Control Unit
 - USB Interface
-- CAN Interface
 - SD Card Interface
 - UART Interface
 
