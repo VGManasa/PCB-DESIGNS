@@ -9,7 +9,7 @@ The projects are intended for learning, experimentation, and academic use.
 ## Projects
 - AC–DC Converter
 - ULN2803A Relay Card
-- Raspberry Pi Pico IOT Board (In progress)
+- UAV Payload Controller
 - (More projects coming soon)
 
 ## Notes
