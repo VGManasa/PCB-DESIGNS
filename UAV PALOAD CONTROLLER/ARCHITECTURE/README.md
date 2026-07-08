@@ -2,20 +2,38 @@
 
 ## Overview
 
-The UAV Payload Controller is a compact embedded system designed to manage payload dispensing, acquire sensor data, determine navigation information, and establish reliable communication with a ground station. The system is built around the **STM32F411** microcontroller, which serves as the central processing unit and coordinates all peripheral modules.
+The UAV Payload Controller is a modular embedded hardware platform designed for UAV-based liquid payload dispensing applications. The architecture is centered around the **STM32F411RET6** microcontroller, which coordinates sensing, navigation, communication, data logging, and payload actuation through dedicated hardware interfaces.
 
-The architecture is organized into independent functional blocks to improve modularity, simplify debugging, and facilitate future hardware expansion.
+The design follows a modular approach, enabling each subsystem to operate independently while being managed by the central controller. This architecture improves system reliability, simplifies debugging, and allows future hardware expansion with minimal design changes.
 
 ---
 
-## Functional Blocks
+## Architecture Overview
 
-### 1. Power Supply & Protection
+The controller consists of the following functional modules:
 
-The power subsystem provides regulated and protected power to all onboard components. It ensures stable operation under varying input conditions while protecting the hardware from electrical faults.
+- Power Supply & Protection
+- STM32F411 Control Unit
+- Communication Interfaces
+- Navigation Module
+- Sensor Interfaces
+- Data Logging
+- Actuation Module
+- Programming & Debug Interface
 
-**Features**
-- 12 V Input
+Each module performs a dedicated function while communicating with the STM32F411 through SPI, UART, GPIO, USB, or SWD interfaces.
+
+---
+
+# Functional Modules
+
+## 1. Power Supply & Protection
+
+The power subsystem supplies regulated voltage to all onboard peripherals and protects the hardware against electrical faults.
+
+### Features
+
+- Protected 12 V Input
 - 5 V Voltage Regulation
 - 3.3 V Voltage Regulation
 - Reverse Polarity Protection
@@ -23,123 +41,245 @@ The power subsystem provides regulated and protected power to all onboard compon
 
 ---
 
-### 2. STM32F411 Microcontroller
+## 2. STM32F411 Control Unit
 
-The STM32F411 acts as the central controller responsible for executing firmware, processing sensor data, managing communication interfaces, and controlling payload operations.
+The STM32F411RET6 serves as the central processing unit of the controller.
 
-**Responsibilities**
-- Central Processing
-- Sensor Interface
-- Communication Management
-- Actuator Control
+### Responsibilities
 
----
-
-### 3. Communication
-
-The communication subsystem enables data exchange between the UAV and external systems.
-
-**Interfaces**
-- LoRa Module (SPI)
-- GPS Module (UART)
-- USB Interface
+- Executes embedded firmware
+- Manages peripheral interfaces
+- Processes sensor data
+- Controls payload dispensing
+- Coordinates communication
+- Handles onboard data logging
 
 ---
 
-### 4. Sensors
+## 3. Communication
 
-The sensor subsystem provides real-time information required for payload monitoring and navigation.
+### LoRa Module
 
-**Sensors**
-- IMU (SPI)
-- Flow Sensor (GPIO)
+Provides long-range wireless communication between the UAV and the ground station.
 
----
+**Interface:** SPI
 
-### 5. Actuation
+**Functions**
 
-The actuation subsystem controls the payload dispensing mechanism through an external pump driver.
-
-**Component**
-- Pump Driver
-
----
-
-### 6. Programming & Debug Interface
-
-The programming interface supports firmware development, debugging, and device programming.
-
-**Interface**
-- SWD (Serial Wire Debug)
-
----
-
-### 7. System Functions
-
-The integration of all hardware modules enables the controller to perform the following high-level functions:
-
-- Sensor Monitoring
-- Payload Dispensing
-- GPS Tracking
 - Telemetry Transmission
-- Remote Communication
+- Remote Monitoring
+- Mission Status Updates
 
 ---
 
-## System Workflow
+### USB Interface
+
+Provides wired connectivity for firmware upload and serial communication.
+
+**Functions**
+
+- Firmware Programming
+- Serial Communication
+- Diagnostics
+
+---
+
+## 4. Navigation
+
+### GPS Module
+
+Provides real-time positioning information for navigation and mission tracking.
+
+**Interface:** UART
+
+**Outputs**
+
+- Latitude
+- Longitude
+- Altitude
+- Speed
+- UTC Time
+
+---
+
+## 5. Sensors
+
+### IMU Module
+
+Measures the UAV's motion and orientation.
+
+**Interface:** SPI
+
+**Measurements**
+
+- Linear Acceleration
+- Angular Velocity
+- Orientation
+
+---
+
+### Flow Sensor
+
+Monitors the liquid flow during payload dispensing.
+
+**Interface:** GPIO
+
+**Functions**
+
+- Flow Rate Measurement
+- Dispensing Verification
+- Payload Monitoring
+
+---
+
+### Tank Level Sensor
+
+Monitors the liquid level inside the payload tank.
+
+**Functions**
+
+- Tank Level Detection
+- Empty Tank Detection
+- Payload Availability Monitoring
+
+---
+
+## 6. Data Logging
+
+### SD Card Module
+
+Provides onboard storage for mission and sensor data.
+
+**Interface:** SPI
+
+**Functions**
+
+- Flight Data Logging
+- GPS Coordinate Storage
+- Sensor Data Logging
+- Mission Log Storage
+- Telemetry Backup
+
+---
+
+## 7. Actuation
+
+### Pump Driver Unit
+
+Controls the external liquid dispensing pump.
+
+**Functions**
+
+- Pump ON/OFF Control
+- Payload Dispensing
+- External Driver Interface
+
+---
+
+## 8. Programming & Debug Interface
+
+Supports firmware development, programming, and debugging.
+
+### Interface
+
+- SWDIO
+- SWCLK
+- NRST
+
+---
+
+# Module Interfaces
+
+| Module | Interface |
+|---------|-----------|
+| LoRa Module | SPI |
+| GPS Module | UART |
+| IMU Module | SPI |
+| SD Card | SPI |
+| Flow Sensor | GPIO |
+| Tank Level Sensor | GPIO |
+| Pump Driver | GPIO |
+| USB Interface | USB |
+| SWD Interface | SWD |
+
+---
+
+# System Workflow
 
 ```text
-Power Input
-      │
-      ▼
-Power Supply & Protection
-      │
-      ▼
-STM32F411 Microcontroller
-      │
- ┌────┼───────────────┐
- │    │               │
- ▼    ▼               ▼
-Sensors      Communication     Actuation
- │            │                 │
- └────────────┴─────────────────┘
-              │
-              ▼
-      System Functions
+                    Protected 12 V Input
+                            │
+                            ▼
+              Power Supply & Protection
+                            │
+                            ▼
+                 STM32F411 Control Unit
+      ┌──────────┬──────────┬──────────┬──────────┐
+      │          │          │          │          │
+      ▼          ▼          ▼          ▼          ▼
+     GPS        IMU       LoRa     SD Card      USB
+      │          │          │          │
+      └──────────┴──────────┴──────────┘
+                   Sensor & Navigation Data
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+          Flow Sensor         Tank Level Sensor
+                 │                     │
+                 └──────────┬──────────┘
+                            ▼
+                   Payload Monitoring
+                            │
+                            ▼
+                       Pump Driver
+                            │
+                            ▼
+                   Liquid Payload Dispensing
 ```
 
 ---
 
-## Design Objectives
+# System Functions
+
+The integrated hardware architecture enables the following operations:
+
+- GPS-based navigation
+- Motion and orientation monitoring
+- Long-range telemetry communication
+- Onboard flight data logging
+- Flow rate monitoring
+- Tank level monitoring
+- Payload dispensing control
+- Firmware programming
+- Hardware debugging
+
+---
+
+# Design Philosophy
 
 The architecture has been developed with the following objectives:
 
-- Modular hardware organization
+- Modular subsystem organization
 - Reliable power distribution
-- Efficient peripheral interfacing
-- Long-range wireless communication
-- Real-time sensor acquisition
-- Scalable system design
-- Simplified firmware development and debugging
+- Efficient peripheral integration
+- Simplified firmware development
+- Scalable hardware design
+- Easy maintenance and debugging
+- Support for future hardware expansion
 
 ---
 
-## Hardware Summary
+# Future Enhancements
 
-| Module | Purpose |
-|---------|---------|
-| STM32F411 | Central processing and peripheral control |
-| Power Supply & Protection | Voltage regulation and circuit protection |
-| LoRa Module | Long-range telemetry communication |
-| GPS Module | Positioning and navigation |
-| IMU | Motion and orientation sensing |
-| Flow Sensor | Payload flow monitoring |
-| Pump Driver | Payload dispensing control |
-| SWD Interface | Programming and debugging |
-| USB Interface | Firmware upload and serial communication |
+The modular architecture allows future integration of additional hardware without significant redesign.
 
----
+Potential enhancements include:
 
-## Notes
-
-This architecture provides a modular foundation for UAV payload management applications. Each subsystem operates independently while being coordinated by the STM32F411 microcontroller, enabling reliable sensing, communication, navigation, and payload control suitable for autonomous and remotely operated UAV platforms.
+- RTK GPS
+- PWM-based variable pump control
+- Battery voltage and current monitoring
+- CAN Bus interface
+- Additional sensor expansion headers
+- Multi-channel payload control
+- Remote firmware updates
+- Autonomous waypoint-based dispensing
