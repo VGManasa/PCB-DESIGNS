@@ -17,7 +17,6 @@ The PCB is designed as the central controller for an agricultural UAV payload sy
 | `UAV PAYLOAD CONTROLLER.kicad_pro` | KiCad project file |
 | `UAV PAYLOAD CONTROLLER.kicad_pcb` | PCB layout |
 | `UAV PAYLOAD CONTROLLER.kicad_sch` | Top-level schematic |
-| `CAN.kicad_sch` | CAN interface |
 | `FLOW_SENSOR.kicad_sch` | Flow sensor circuit |
 | `GPS.kicad_sch` | GPS module |
 | `IMU.kicad_sch` | IMU interface |
@@ -33,12 +32,11 @@ The PCB is designed as the central controller for an agricultural UAV payload sy
 | `uav_payload_footlib.pretty/` | Custom footprint library |
 
 ## Hardware Features
-
+- Power Supply, Regulation & Protection
 - STM32-based controller
 - LoRa wireless communication
 - GPS interface
 - IMU integration
-- CAN communication
 - SD card storage
 - USB interface
 - UART debugging
